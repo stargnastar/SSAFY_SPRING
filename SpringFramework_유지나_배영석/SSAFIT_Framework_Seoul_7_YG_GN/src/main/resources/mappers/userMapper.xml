@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.ssafit.model.dao.UserDao">
+	
+	<insert id="insertUser" parameterType="User">
+		INSERT INTO user(id, pw, name, nickName, email, age, img, orgImg)
+		VALUES(#{id}, #{pw}, #{name}, #{nickName}, #{email}, #{age}, #{img}, #{orgImg});
+	</insert>
+	
+	<update id="updateUser" parameterType="User" >
+		UPDATE user SET pw=#{pw}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteUser" parameterType="User">
+		DELETE FROM user
+		WHERE id=#{id};
+	</delete>
+	
+	<select id="selectByCondition" parameterType="SearchCondition" resultType="User">
+		SELECT * FROM user
+		<if test="key != 'none'">
+			WHERE #{key} = #{word}
+		</if>
+		<if test="orderBy !='none'">
+			ORDER BY #{orderBy} #{orderDir}
+		</if>
+	
+	</select>
+	
+	<select id="selectByCondition" parameterType="String" resultType="User">
+		SELECT * FROM user
+		WHERE id = #{id};
+	</select>
+	
+	<select id="selectAll"  resultType="User">
+		SELECT * FROM user
+	</select>
+
+	
+	<insert id="insertFollow" parameterType="Follow">
+		INSERT INTO follow
+		VALUES(#{follower}, #{followed});
+	</insert>
+	
+	<insert id="insertJim" parameterType="Subscribe">
+		INSERT INTO subscribe
+		VALUES(#{id}, #{subscriber});
+	</insert>
+	
+	<delete id="deleteFollow" parameterType="Follow">
+		DELETE FROM follow
+		WHERE follower=#{follower} and followed=#{followed};
+	</delete>
+	
+	<delete id="deleteJim" parameterType="Subscribe">
+		DELETE FROM subscribe
+		WHERE id=#{id} and subscriber=#{subscriber};
+	</delete>
+	
+	
+	
+	<select id="selectFollow" parameterType="SearchCondition" resultType="Follow">
+		SELECT * FROM follow
+		<if test="key != 'none'">
+			WHERE #{key} = #{word}
+		</if>
+		<if test="orderBy !='none'">
+			ORDER BY #{orderBy} #{orderDir}
+		</if>
+	</select>
+	
+	<select id="selectSubscribe" parameterType="SearchCondition" resultType="Subscribe">
+		SELECT * FROM subscribe
+		<if test="key != 'none'">
+			WHERE #{key} = #{word}
+		</if>
+		<if test="orderBy !='none'">
+			ORDER BY #{orderBy} #{orderDir}
+		</if>
+	</select>
+	
+	
+	
+	
+	
+</mapper>
+

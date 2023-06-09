@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.ssafit.model.dao.ArticleDao">
+
+	<resultMap type="Article" id="articleMap">
+		<result column="id" property="articleId" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="writer" property="writer" />
+		<result column="part" property="part" />
+		<result column="view_cnt" property="viewCnt" />
+		<result column="created_at" property="createdAt" />
+		<result column="updated_at" property="modifiedAt" />
+		<result column="url" property="url" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="articleMap">
+		SELECT *
+		FROM article;
+	</select>
+
+	<select id="selectOne" parameterType="int"
+		resultMap="articleMap">
+		SELECT *
+		FROM article
+		WHERE id=#{articleId}
+	</select>
+
+	<select id="searchArticle" parameterType="SearchCondition"
+		resultMap="articleMap">
+		SELECT *
+		FROM article
+		<if test="key != 'none'">
+			WHERE ${key} LIKE concat('%', #{word}, '%')
+		</if>
+		<if test="orderBy != 'none'">
+			ORDER BY ${orderBy} ${orderByDir}
+		</if>
+	</select>
+	
+	<insert id="insertArticle" parameterType="Article">
+		INSERT INTO article (title, content, writer, part, `url`)
+		VALUES (#{title}, #{content}, #{writer}, #{part}, #{url})
+	</insert>
+	
+	<update id="updateArticle" parameterType="Article">
+		UPDATE article
+		SET title = #{title}, content = #{content}, updated_at=now() 
+		WHERE id = #{articleId}
+	</update>
+	
+	<update id="updateViewCnt" parameterType="int">
+		UPDATE article
+		SET view_cnt = view_cnt + 1
+		WHERE id = #{articleId}
+	</update>
+	
+	<delete id="deleteArticle" parameterType="int">
+		DELETE FROM article
+		WHERE id = #{articleId}
+	</delete>
+	
+	
+
+
+</mapper>
